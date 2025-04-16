@@ -53,6 +53,10 @@ llm -f 'yt:https://www.youtube.com/watch?v=VIDEO_ID_HERE' 'What are the main poi
 
 The plugin will call the Supadata API to retrieve the plain text transcript of the specified video. If the API key is missing or invalid, or if the transcript cannot be fetched, an error will be raised.
 
+## TODO
+
+- [ ] Use `youtube-transcript-api` library instead of Supadata.
+
 ## Development
 
 To set up this plugin locally, first checkout the code. Then create a new virtual environment:
