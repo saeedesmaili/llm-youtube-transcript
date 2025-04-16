@@ -56,6 +56,7 @@ The plugin will call the Supadata API to retrieve the plain text transcript of t
 ## TODO
 
 - [ ] Use `youtube-transcript-api` library instead of Supadata.
+- [ ] Add support for `yt:VIDEO_ID`.
 
 ## Development
 
