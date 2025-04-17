@@ -35,20 +35,22 @@ This plugin requires a Supadata API key to function. You get 100 requests per mo
 
 ## Usage
 
-You can feed the transcript of a YouTube video into LLM using the `yt:` [fragment](https://llm.datasette.io/en/stable/fragments.html) prefix followed by the video URL.
+You can feed the transcript of a YouTube video into LLM using the `yt:` [fragment](https://llm.datasette.io/en/stable/fragments.html) prefix followed by either the full video URL or just the video ID.
 
 Make sure you have set the `SUPADATA_API_KEY` environment variable first.
 
-**Note:** If your YouTube URL contains special characters (like `?` or `&`), you **must** enclose the entire fragment identifier (e.g., `yt:https://...`) in single or double quotes on the command line. This prevents your shell from misinterpreting the URL.
+**Note:** If your YouTube URL contains special characters (like `?` or `&`), you **must** enclose the entire fragment identifier (e.g., `yt:https://...`) in single or double quotes on the command line. This prevents your shell from misinterpreting the URL or ID.
 
 For example:
 
 ```bash
-# Fetch transcript from a YouTube video URL (note the quotes)
+llm -f yt:https://youtu.be/dQw4w9WgXcQ 'Summarize this transcript'
+
+# Fetch transcript using the full YouTube video URL (note the quotes)
 llm -f 'yt:https://www.youtube.com/watch?v=dQw4w9WgXcQ' 'Summarize this transcript'
 
-# Example with a different video
-llm -f 'yt:https://www.youtube.com/watch?v=VIDEO_ID_HERE' 'What are the main points discussed in this video?'
+# Fetch transcript using just the video ID
+llm -f yt:dQw4w9WgXcQ 'Summarize this transcript'
 ```
 
 The plugin will call the Supadata API to retrieve the plain text transcript of the specified video. If the API key is missing or invalid, or if the transcript cannot be fetched, an error will be raised.
@@ -56,6 +58,7 @@ The plugin will call the Supadata API to retrieve the plain text transcript of t
 ## TODO
 
 - [ ] Use `youtube-transcript-api` library instead of Supadata.
+- [x] Add support for VideoID.
 
 ## Development
 

@@ -1,6 +1,7 @@
 import llm
 import httpx
 import os
+import re
 
 REQUEST_TIMEOUT = 60
 SUPADATA_API_URL = "https://api.supadata.ai/v1/youtube/transcript"
@@ -13,13 +14,33 @@ def register_fragment_loaders(register):
     register("yt", load_youtube_transcript)
 
 
-def load_youtube_transcript(url_string: str) -> llm.Fragment:
+def load_youtube_transcript(input_string: str) -> llm.Fragment:
     """
-    Load a transcript from a YouTube video URL using the Supadata API.
+    Load a transcript from a YouTube video URL or video ID using
+    the Supadata API.
 
     Takes the part after 'yt:' as input.
-    Example input: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    Example inputs:
+    - 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    - 'dQw4w9WgXcQ'
     """
+    youtube_id_regex = r"^[a-zA-Z0-9_-]{11}$"
+    is_http = input_string.startswith("http://")
+    is_https = input_string.startswith("https://")
+    is_full_url = is_http or is_https
+
+    if is_full_url:
+        url_string = input_string
+    else:
+        if not re.match(youtube_id_regex, input_string):
+            raise ValueError(
+                f"Invalid YouTube video ID format: '{input_string}'. "
+                "Expected 11 characters (letters, numbers, -, _)."
+            )
+        video_id = input_string
+        base_url = "https://www.youtube.com/watch?v="
+        url_string = f"{base_url}{video_id}"
+
     api_key = os.environ.get("SUPADATA_API_KEY")
     if not api_key:
         raise ValueError(
