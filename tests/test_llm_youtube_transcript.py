@@ -24,7 +24,7 @@ def mock_env(monkeypatch):
     monkeypatch.setenv("SUPADATA_API_KEY", "test-api-key")
 
 
-def test_load_youtube_transcript_with_video_id(httpx_mock):
+def test_load_youtube_transcript_with_video_id(httpx_mock, mock_env):
     """Test loading transcript using just the video ID."""
     httpx_mock.add_response(json=EXAMPLE_API_RESPONSE)
 
@@ -36,7 +36,7 @@ def test_load_youtube_transcript_with_video_id(httpx_mock):
 
 
 @pytest.mark.httpx
-def test_load_youtube_transcript_with_full_url(httpx_mock):
+def test_load_youtube_transcript_with_full_url(httpx_mock, mock_env):
     """Test loading transcript using the full video URL."""
     httpx_mock.add_response(json=EXAMPLE_API_RESPONSE)
 
@@ -63,7 +63,7 @@ def test_load_youtube_transcript_missing_api_key(monkeypatch):
         load_youtube_transcript(TEST_VIDEO_ID)
 
 
-def test_load_youtube_transcript_api_error(httpx_mock):
+def test_load_youtube_transcript_api_error(httpx_mock, mock_env):
     """Test handling of API errors from Supadata."""
     error_response = {"detail": "Authentication credentials were not provided."}
     httpx_mock.add_response(json=error_response, status_code=401)
@@ -79,7 +79,7 @@ def test_load_youtube_transcript_api_error(httpx_mock):
 
 
 @pytest.mark.httpx
-def test_load_youtube_transcript_api_non_json_error(httpx_mock):
+def test_load_youtube_transcript_api_non_json_error(httpx_mock, mock_env):
     """Test handling of non-JSON API error responses."""
     error_text = "<html><body>Gateway Timeout</body></html>"
     httpx_mock.add_response(
@@ -97,7 +97,7 @@ def test_load_youtube_transcript_api_non_json_error(httpx_mock):
 
 
 @pytest.mark.httpx
-def test_load_youtube_transcript_api_unexpected_content_type(httpx_mock):
+def test_load_youtube_transcript_api_unexpected_content_type(httpx_mock, mock_env):
     """Test handling of unexpected content type in successful response."""
     httpx_mock.add_response(
         text="This is not JSON",
@@ -114,7 +114,7 @@ def test_load_youtube_transcript_api_unexpected_content_type(httpx_mock):
 
 
 @pytest.mark.httpx
-def test_load_youtube_transcript_api_missing_content_key(httpx_mock):
+def test_load_youtube_transcript_api_missing_content_key(httpx_mock, mock_env):
     """Test handling when 'content' key is missing in API response."""
     incomplete_response = {
         "metadata": {},
