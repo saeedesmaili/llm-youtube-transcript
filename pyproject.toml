@@ -1,6 +1,6 @@
 [project]
 name = "llm-youtube-transcript"
-version = "0.1"
+version = "0.2"
 description = "Plugin for LLM that adds support for fetching transcripts from YouTube videos using Supadata API"
 readme = "README.md"
 authors = [{name = "Saeed Esmaili"}]
